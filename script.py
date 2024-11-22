@@ -4,12 +4,17 @@ import re
 import tarfile
 import requests
 import concurrent.futures
-import openai  # GPT 사용을 위한 openai 라이브러리
+
+# import openai  # GPT 사용을 위한 openai 라이브러리
+from openai import OpenAI
+
 from bs4 import BeautifulSoup
 import logging
 import shutil
 import json
 import time
+
+from dotenv import load_dotenv
 
 # 로그 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -41,7 +46,79 @@ def translate_text(text: str, paper_info: dict, chunk_size: int, target_language
     retry_attempts = 3  # Number of retry attempts
     for attempt in range(retry_attempts):
         try:
-            response = openai.ChatCompletion.create(
+            # response = openai.ChatCompletion.create(
+            #     model="gpt-4o-mini",
+            #     response_format={"type": "json_object"},
+            #     messages=[
+            #         {"role": "system", "content": f"""
+            #             You are an AI assistant specialized in translating academic papers in LaTeX format to {target_language}. Your task is to translate the content accurately while preserving the LaTeX structure and formatting. Pay close attention to technical terms and follow these guidelines meticulously.
+            #             Translation Instructions:
+
+            #             1. Translate the main content into {target_language}, preserving the structure and flow of the original text. Use an academic and formal tone appropriate for scholarly publications in {target_language}. Do not insert any arbitrary line breaks in the translated content.
+
+            #             2. Technical Terms:
+            #                a. Retain well-known technical terms, product names, or specialized concepts (e.g., Few-Shot Learning) in English.
+            #                b. Do not translate examples, especially if they contain technical content or are essential for context.
+
+            #             3. LaTeX Commands:
+            #                - Do not translate LaTeX commands, functions, environments, or specific LaTeX-related keywords (e.g., \section{{}}, \begin{{}}, \end{{}}, \cite{{}}, \ref{{}}, or TikZ syntax such as /tikz/fill, /tikz/draw, etc.) into {target_language}. They must be output exactly as they are.
+            #                - Only translate the provided text without making any additional modifications.
+
+            #             4. Citation and Reference Keys:
+            #                - Ensure all citation keys within \\cite{{}} and reference keys within \\ref{{}} remain unchanged. Do not translate or modify these keys.
+
+            #             5. URLs and DOIs:
+            #                - Do not translate URLs, DOIs, or any other links. Keep them in their original form.
+
+            #             6. Mathematical Equations and Formulas:
+            #                - Maintain all mathematical equations and formulas as they are in the original LaTeX. Do not translate code or LaTeX mathematical notation.
+
+            #             7. Names:
+            #                - Do not translate author names, personal names, or any other individual names. Keep these in their original English form.
+
+            #             8. Consistency:
+            #                - Ensure consistent terminology throughout the translation.
+
+            #             9. Protection of LaTeX Commands:
+            #                 - Preserve line breaks (\\\\) and other formatting commands exactly as they appear in the original text.
+
+            #             10. Avoid Misleading Translations:
+            #                 - Do not translate technical terms, product names, specialized concepts, examples, or personal names where translation could lead to a loss of meaning or context.
+
+            #             11. JSON Structure:
+            #                 - Translate the content line by line, providing the translation in a JSON structure.
+            #                 For example:
+            #                   ```json
+            #                   translate : {{
+            #                     lines: [
+            #                     "Translated Line 1",
+            #                     "Translated Line 2"
+            #                   ]}}
+            #                   ```
+
+            #             ### Paper Info:
+            #             - Title : {paper_title}
+            #             - Abstract : {paper_abstract}
+                        
+            #             ### Response Example:
+            #             #INPUT:
+            #             ["\\n", "\\documentclass{{article}} % For LaTeX2e\\n", "\\usepackage{{colm2024_conference}}\\n", "\\n", "\\usepackage{{microtype}}\\n"]
+            #             #OUTPUT:
+            #             {{"translate": {{"lines": ["\\n", "\\documentclass{{article}} % For LaTeX2e\\n", "\\usepackage{{colm2024_conference}}", "\\n", "\\usepackage{{microtype}}\\n"]}}}}
+                        
+            #             ### VERY IMPORTANT
+            #             - DO NOT translate comments starting with "%" by arbitrarily merging them.
+            #             - DO NOT break a sentence into multiple paragraphs.
+            #             - Output the translated result in JSON format, without any other explanation.
+            #             - It should be translated and output in the same form as the unconditional input.
+            #             - Translate and output even single characters like '\\n', '{{', '/', '%', etc.
+            #             """
+            #          },
+            #         {"role": "user", "content": f"{cleaned_text}"}
+            #     ]
+            # )
+
+            response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 response_format={"type": "json_object"},
                 messages=[
@@ -113,13 +190,17 @@ def translate_text(text: str, paper_info: dict, chunk_size: int, target_language
                 ]
             )
 
-            translated_content = response.choices[0].message['content']
+
+            # translated_content = response.choices[0].message['content']
+            translated_content = response.choices[0].message.content
+            
+            
             translation_result = json.loads(translated_content)
             translation_lines = translation_result["translate"]['lines']
             translated_line_count = len(translation_lines)
 
             if translated_line_count != chunk_size:
-                time.sleep(1)  # Optional: wait before retrying
+                time.sleep(10)  # Optional: wait before retrying
                 continue  # Retry the translation
 
             return ''.join(translation_lines)
@@ -453,9 +534,15 @@ def download_arxiv_intro_and_tex(arxiv_id: str, download_dir: str, target_langua
     compile_main_tex(extract_to, arxiv_id, font_name)
 
 if __name__ == "__main__":
-    # GPT API 호출을 위한 설정
-    openai.api_key = 'OPENAI_API_KEY'  # 여기에 실제 API 키를 입력하세요.
+    load_dotenv()
 
+    # GPT API 호출을 위한 설정
+    # openai.api_key = 'OPENAI_API_KEY'  # 여기에 실제 API 키를 입력하세요.
+    
+    client = OpenAI(
+        api_key = os.environ.get("OPENAI_API_KEY"),
+    )    
+    
     arxiv_input = input("Enter ArXiv ID or URL: ")
     arxiv_id = extract_arxiv_id(arxiv_input)
     download_dir = 'arxiv_downloads'
