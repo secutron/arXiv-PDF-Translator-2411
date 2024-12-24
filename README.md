@@ -13,9 +13,9 @@
 2. 대략 10개 논문 중에서 7~8개 정도만 최종 pdf 생성에 성공합니다. (실패 원인에 대해 분석이나 추가 작업 계획이 없습니다. ㅠㅠ)
 3. 실패 케이스나 결과물 품질을 생각하면, 시간 낭비라고 생각될 수도 있습니다.
 
-https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/sample_0.jpg?raw=true
+![결과](https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/sample_0.jpg?raw=true)
 
-https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/sample_1.jpg?raw=true
+![결과](https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/sample_1.jpg?raw=true)
 
 
 
