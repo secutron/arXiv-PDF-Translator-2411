@@ -1,5 +1,25 @@
 
-# update: 
+
+# Repo 개요
+
+본 repo는 [GENEXIS-AI/arXiv-PDF-Translator](https://github.com/GENEXIS-AI/arXiv-PDF-Translator) 의 Fork이며, 소소한 문제점 해결을 위해 아래의 update 작업을 진행하였습니다.
+
+## 배경
+제가 논문을 읽을 때 ChatGPT나 Perplexity 등으로부터 큰 도움을 받고 있습니다. 그런데 이들 LLM들이 점점 더 검색에 의존하는 경향이 커지고 있어서, 좀 오래된 논문들과 같은 경우에는 현재의 수준과는 매우 동떨어진 결과를 얻는 경우가 많았습니다. 아마도 논문 작성 시점의 블로그 리뷰 등이 검색되고 LLM 답변에 반영되는 것으로 보이는데, 이 때문에 결국 본 논문을 다시 확인해야 하더군요. 이럴 때 포맷이 유지된 형태로 번역된 논문을 빠르게 볼 수 있으면 좋을 것이라 생각했습니다.
+
+아래는 제가 주로 작업하는 윈도 환경에서 gpt-4o를 사용해 얻은 번역 결과입니다. 보시다시피, 
+
+1. 작성 시점(24.12월) 기준으로 일부 번역이 안되는 부분이 있으니 참고하시기 바랍니다.
+2. 대략 10개 논문 중에서 7~8개 정도만 최종 pdf 생성에 성공합니다. (실패 원인에 대해 분석이나 추가 작업 계획이 없습니다. ㅠㅠ)
+3. 실패 케이스나 결과물 품질을 생각하면, 시간 낭비라고 생각될 수도 있습니다.
+
+https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/sample_0.jpg?raw=true
+
+https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/sample_1.jpg?raw=true
+
+
+
+## update: 
     1. dotenv로 api-key 분리
     2. openai의 api 변경내용 적용
 
