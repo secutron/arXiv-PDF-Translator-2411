@@ -35,7 +35,7 @@ arXiv-PDF-Translator는 연구자, 학계 종사자 및 기관을 위한 효율�
 
 이 프로젝트의 사용 방법에 대한 자세한 설명은 아래 동영상을 참고하세요:
 
-![사용법](https://github.com/secutron/arXiv-PDF-Translator-2411/demo.mp4)
+![사용법](https://github.com/secutron/arXiv-PDF-Translator-2411/blob/main/demo.mp4)
 
 ## 기능
 
