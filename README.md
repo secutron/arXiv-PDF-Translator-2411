@@ -21,10 +21,10 @@
 
 ## update: 
     1. dotenv로 api-key 분리
-    2. openai의 api 변경내용 적용
-
-
-
+    2. openai의 api 변경내용 적용  
+  
+  
+  
 # arXiv 논문 자동 번역 및 PDF 생성 도구
 
 arXiv-PDF-Translator는 arXiv 논문을 다운로드하고, LaTeX 소스 파일을 자동 번역하여 PDF 파일로 생성하는 강력한 도구입니다. OpenAI의 GPT API를 활용하여 복잡한 LaTeX 문서를 한국어로 정확하게 번역하며, 이를 고품질 PDF 문서로 컴파일합니다.
